@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A playful, interactive starter guide to HTML, CSS, JavaScript, and PHP." />
+  <title>CodeLab — Web Basics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2e;
+      --panel-2: #17223a;
+      --text: #f4f7ff;
+      --muted: #a6b2cc;
+      --line: rgba(190, 207, 255, .14);
+      --coral: #ff6b5f;
+      --lime: #c7f36b;
+      --blue: #75b8ff;
+      --purple: #c5a3ff;
+      --shadow: 0 22px 60px rgba(0,0,0,.24);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+    body {
+      margin: 0; background: radial-gradient(ellipse at 80% 0%, #20244a 0, transparent 36%), var(--bg);
+      color: var(--text); font-family: "Space Grotesk", system-ui, sans-serif; line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(18px);
+      background: rgba(11,16,32,.82); border-bottom: 1px solid var(--line);
+    }
+    .nav-wrap { max-width: 1160px; margin: auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.04em; font-size: 1.2rem; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; color: #101522; background: var(--lime); font-weight: 800; transform: rotate(-5deg); }
+    .brand span em { color: var(--coral); font-style: normal; }
+    .nav-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: var(--muted); font-size: .9rem; padding: 8px 12px; border-radius: 9px; transition: .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--panel-2); }
+    .theme-btn { border: 1px solid var(--line); background: transparent; color: var(--text); padding: 8px 11px; border-radius: 10px; }
+    main { max-width: 1160px; margin: auto; padding: 0 24px 70px; }
+    .hero { padding: 76px 0 54px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--lime); text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; font-weight: 700; }
+    .eyebrow:before { content: ""; width: 22px; height: 2px; background: var(--lime); }
+    h1 { font-size: clamp(2.8rem, 6vw, 5.3rem); letter-spacing: -.075em; line-height: .98; margin: 18px 0 22px; max-width: 680px; }
+    h1 .accent { color: var(--coral); }
+    .hero p { max-width: 580px; color: var(--muted); font-size: 1.08rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 0; padding: 12px 17px; border-radius: 12px; font-weight: 700; transition: transform .2s, filter .2s; }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .btn-primary { color: #121522; background: var(--lime); }
+    .btn-secondary { color: var(--text); background: var(--panel-2); border: 1px solid var(--line); }
+    .terminal { background: #090e1b; border: 1px solid rgba(197,163,255,.3); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transform: rotate(1deg); }
+    .terminal-top { padding: 14px 17px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 7px; color: var(--muted); font: .78rem "DM Mono", monospace; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--coral); } .dot:nth-child(2) { background: #ffc857; } .dot:nth-child(3) { background: var(--lime); }
+    .terminal-body { padding: 24px; font: .86rem/2 "DM Mono", monospace; color: #d5def4; }
+    .terminal-body .pink { color: #ff8eae; } .terminal-body .green { color: var(--lime); } .terminal-body .blue { color: var(--blue); }
+    .terminal-note { color: #8390ad; border-top: 1px solid var(--line); padding: 12px 24px; font: .75rem "DM Mono", monospace; }
+    .section-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 34px 0 20px; }
+    .section-heading h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.7rem); letter-spacing: -.055em; }
+    .section-heading p { margin: 0; color: var(--muted); max-width: 440px; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .tech-card { background: linear-gradient(145deg, var(--panel-2), var(--panel)); border: 1px solid var(--line); border-radius: 17px; padding: 21px; min-height: 205px; transition: transform .2s, border-color .2s; }
+    .tech-card:hover { transform: translateY(-5px); border-color: rgba(199,243,107,.55); }
+    .tech-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; font-weight: 800; font-size: 1.05rem; margin-bottom: 17px; }
+    .html-icon { color: #ff9c83; background: rgba(255,107,95,.13); }
+    .css-icon { color: #8dc6ff; background: rgba(117,184,255,.13); }
+    .js-icon { color: #f9df7b; background: rgba(249,223,123,.13); }
+    .php-icon { color: #d2b6ff; background: rgba(197,163,255,.13); }
+    .tech-card h3 { margin: 0 0 7px; font-size: 1.15rem; }
+    .tech-card p { color: var(--muted); font-size: .9rem; margin: 0 0 15px; }
+    .text-link { color: var(--lime); font-weight: 700; font-size: .88rem; }
+    .lesson { margin-top: 72px; display: grid; grid-template-columns: .7fr 1.3fr; gap: 30px; align-items: start; }
+    .lesson-intro { position: sticky; top: 100px; }
+    .lesson-number { color: var(--coral); font: .8rem "DM Mono", monospace; letter-spacing: .1em; }
+    .lesson h2 { font-size: clamp(2rem, 4vw, 3.1rem); letter-spacing: -.06em; line-height: 1.08; margin: 10px 0 14px; }
+    .lesson-intro p { color: var(--muted); }
+    .tag { display: inline-block; padding: 5px 9px; border: 1px solid var(--line); border-radius: 8px; font: .75rem "DM Mono", monospace; color: var(--muted); margin: 4px 5px 0 0; }
+    .lesson-content { display: grid; gap: 16px; }
+    .info-panel { border: 1px solid var(--line); background: rgba(18,26,46,.82); border-radius: 17px; padding: 22px; }
+    .info-panel h3 { margin: 0 0 8px; font-size: 1.05rem; }
+    .info-panel p, .info-panel li { color: var(--muted); font-size: .94rem; }
+    .info-panel ul { padding-left: 20px; margin-bottom: 0; }
+    .code-card { overflow: hidden; background: #080d18; border: 1px solid var(--line); border-radius: 14px; }
+    .code-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; color: var(--muted); font: .75rem "DM Mono", monospace; border-bottom: 1px solid var(--line); }
+    .copy-btn { background: #1b2740; border: 1px solid var(--line); color: var(--text); border-radius: 7px; padding: 5px 9px; font: .72rem "Space Grotesk", sans-serif; }
+    pre { margin: 0; padding: 18px; overflow-x: auto; color: #dce5fb; font: .82rem/1.75 "DM Mono", monospace; }
+    .kw { color: #c5a3ff; } .str { color: #c7f36b; } .comment { color: #7787a7; } .attr { color: #ff9c83; }
+    .demo-box { background: #f6f8fc; color: #18223a; padding: 20px; border-radius: 12px; margin-top: 14px; }
+    .demo-box button { border: 0; background: #ff6b5f; color: #fff; font-weight: 700; padding: 9px 12px; border-radius: 8px; }
+    .demo-box #demo-message { margin: 10px 0 0; font-weight: 700; color: #253454; }
+    .mini-label { color: var(--lime); text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; font-weight: 700; }
+    .quiz { margin-top: 72px; padding: 30px; border: 1px solid rgba(199,243,107,.25); background: linear-gradient(120deg, rgba(199,243,107,.08), rgba(197,163,255,.07)); border-radius: 20px; }
+    .quiz h2 { margin: 5px 0 8px; font-size: 2rem; letter-spacing: -.05em; }
+    .quiz p { color: var(--muted); }
+    .quiz-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+    .quiz-options button { padding: 10px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 10px; }
+    .quiz-options button:hover { border-color: var(--lime); }
+    #quiz-result { min-height: 28px; font-weight: 700; }
+    footer { max-width: 1160px; margin: auto; padding: 24px; border-top: 1px solid var(--line); color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: .85rem; }
+    .light-mode { --bg: #f3f5fb; --panel: #fff; --panel-2: #e8edf7; --text: #172039; --muted: #5e6982; --line: rgba(32,48,83,.15); --shadow: 0 22px 60px rgba(35,48,78,.12); background: radial-gradient(ellipse at 80% 0%, #e1dcff 0, transparent 36%), var(--bg); }
+    .light-mode .topbar { background: rgba(243,245,251,.86); }
+    .light-mode .terminal, .light-mode .code-card { background: #10172a; }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 52px; } .terminal { max-width: 600px; transform: none; } .cards { grid-template-columns: repeat(2, 1fr); } .lesson { grid-template-columns: 1fr; gap: 18px; } .lesson-intro { position: static; } }
+    @media (max-width: 560px) { .nav-wrap { padding: 12px 16px; align-items: flex-start; } .nav-links { gap: 2px; } .nav-links a { padding: 7px; font-size: .78rem; } .theme-btn { font-size: .78rem; } main { padding-left: 16px; padding-right: 16px; } .hero { padding-top: 42px; } .cards { grid-template-columns: 1fr; } .section-heading { display: block; } .section-heading p { margin-top: 8px; } .quiz { padding: 22px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav-wrap" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="CodeLab home"><span class="brand-mark">C</span><span>code<em>lab</em></span></a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#html">HTML</a>
+        <a href="#css">CSS</a>
+        <a href="#javascript">JavaScript</a>
+        <a href="#php">PHP</a>
+      </div>
+      <button class="theme-btn" id="theme-toggle" type="button" aria-label="Toggle light and dark theme">◐ Theme</button>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Your web-dev starter pack</span>
+        <h1>Four tools.<br>One <span class="accent">web</span> world.</h1>
+        <p>Get the big picture on HTML, CSS, JavaScript, and PHP. Explore the essentials, peek at real code, and try a tiny interaction — all on one page.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#overview">Explore the basics <span aria-hidden="true">↘</span></a>
+          <a class="btn btn-secondary" href="#playground">Try the mini demo <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="terminal" aria-label="Decorative code preview">
+        <div class="terminal-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">hello-world.dev</span></div>
+        <div class="terminal-body">
+          <div><span class="pink">&lt;html&gt;</span></div>
+          <div>&nbsp;&nbsp;<span class="pink">&lt;body&gt;</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="blue">build</span>(<span class="green">"something cool"</span>);</div>
+          <div>&nbsp;&nbsp;<span class="pink">&lt;/body&gt;</span></div>
+          <div><span class="pink">&lt;/html&gt;</span></div>
+        </div>
+        <div class="terminal-note">// small steps → real projects</div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="section-heading">
+        <div><span class="eyebrow">The big four</span><h2>Know your tools.</h2></div>
+        <p>Each technology has a different job. Together, they can turn a blank page into a full web experience.</p>
+      </div>
+      <div class="cards">
+        <article class="tech-card">
+          <div class="tech-icon html-icon">H5</div><h3>HTML</h3><p>The structure and meaning of a page: headings, links, images, and forms.</p><a class="text-link" href="#html">Learn HTML ↗</a>
+        </article>
+        <article class="tech-card">
+          <div class="tech-icon css-icon">✳</div><h3>CSS</h3><p>The visual layer: colors, spacing, layouts, responsive design, and animation.</p><a class="text-link" href="#css">Learn CSS ↗</a>
+        </article>
+        <article class="tech-card">
+          <div class="tech-icon js-icon">JS</div><h3>JavaScript</h3><p>The behavior layer: respond to clicks, update content, and build interactions.</p><a class="text-link" href="#javascript">Learn JavaScript ↗</a>
+        </article>
+        <article class="tech-card">
+          <div class="tech-icon php-icon">php</div><h3>PHP</h3><p>A server-side language often used for forms, sessions, and database-backed pages.</p><a class="text-link" href="#php">Learn PHP ↗</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="lesson" id="html">
+      <div class="lesson-intro">
+        <span class="lesson-number">01 / STRUCTURE</span><h2>HTML gives content its shape.</h2>
+        <p>HTML stands for HyperText Markup Language. It uses elements (tags) to describe what each piece of content is.</p>
+        <span class="tag">&lt;h1&gt;</span><span class="tag">&lt;p&gt;</span><span class="tag">&lt;a&gt;</span><span class="tag">&lt;img&gt;</span>
+      </div>
+      <div class="lesson-content">
+        <div class="info-panel"><h3>Think of HTML as the blueprint</h3><p>Use headings for hierarchy, paragraphs for text, lists for collections, and anchor tags for navigation. Semantic elements such as <code>&lt;main&gt;</code> and <code>&lt;nav&gt;</code> help browsers and assistive technology understand the page.</p></div>
+        <div class="code-card"><div class="code-head"><span>index.html</span><button class="copy-btn" data-copy="html-code">Copy code</button></div>
+<pre id="html-code"><code><span class="kw">&lt;main&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>Hello, web!<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;p&gt;</span>My first page is taking shape.<span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;a</span> <span class="attr">href</span>=<span class="str">"#css"</span><span class="kw">&gt;</span>Jump to CSS<span class="kw">&lt;/a&gt;</span>
+<span class="kw">&lt;/main&gt;</span></code></pre></div>
+      </div>
+    </section>
+
+    <section class="lesson" id="css">
+      <div class="lesson-intro">
+        <span class="lesson-number">02 / STYLE</span><h2>CSS brings the personality.</h2>
+        <p>CSS stands for Cascading Style Sheets. It controls how elements look and how they arrange themselves across screen sizes.</p>
+        <span class="tag">color</span><span class="tag">flexbox</span><span class="tag">grid</span><span class="tag">:hover</span>
+      </div>
+      <div class="lesson-content">
+        <div class="info-panel"><h3>Style with rules</h3><p>A CSS rule selects an element, then applies declarations. Start with readable contrast, consistent spacing, and layouts that adapt to mobile screens.</p></div>
+        <div class="code-card"><div class="code-head"><span>styles.css</span><button class="copy-btn" data-copy="css-code">Copy code</button></div>
+<pre id="css-code"><code><span class="comment">/* A bold, responsive card */</span>
+<span class="kw">.card</span> {
+  <span class="attr">background</span>: <span class="str">#121a2e</span>;
+  <span class="attr">color</span>: <span class="str">#f4f7ff</span>;
+  <span class="attr">padding</span>: <span class="str">1.5rem</span>;
+  <span class="attr">border-radius</span>: <span class="str">16px</span>;
+}
+<span class="kw">.card:hover</span> {
+  <span class="attr">transform</span>: <span class="str">translateY(-4px)</span>;
+}</code></pre></div>
+      </div>
+    </section>
+
+    <section class="lesson" id="javascript">
+      <div class="lesson-intro">
+        <span class="lesson-number">03 / INTERACTION</span><h2>JavaScript makes it respond.</h2>
+        <p>JavaScript runs in the browser and can react to events, change page content, validate input, and communicate with APIs.</p>
+        <span class="tag">events</span><span class="tag">DOM</span><span class="tag">functions</span>
+      </div>
+      <div class="lesson-content">
+        <div class="info-panel"><h3>From static to interactive</h3><p>JavaScript can listen for a click and update an element without reloading the whole page. Try the demo below to see a simple event handler in action.</p></div>
+        <div class="code-card"><div class="code-head"><span>script.js</span><button class="copy-btn" data-copy="js-code">Copy code</button></div>
+<pre id="js-code"><code><span class="kw">const</span> button = document.querySelector(<span class="str">"#hello-button"</span>);
+button.addEventListener(<span class="str">"click"</span>, () =&gt; {
+  document.querySelector(<span class="str">"#demo-message"</span>)
+    .textContent = <span class="str">"Nice! JavaScript is working."</span>;
+});</code></pre></div>
+        <div class="demo-box" id="playground"><strong>Interactive playground</strong><p>Press the button and watch the message change.</p><button type="button" id="hello-button">Run interaction ↗</button><p id="demo-message" aria-live="polite">Your code is ready when you are.</p></div>
+      </div>
+    </section>
+
+    <section class="lesson" id="php">
+      <div class="lesson-intro">
+        <span class="lesson-number">04 / SERVER</span><h2>PHP works behind the scenes.</h2>
+        <p>PHP is a server-side scripting language. A server runs the PHP code and can return generated HTML to the browser.</p>
+        <span class="tag">server-side</span><span class="tag">forms</span><span class="tag">sessions</span>
+      </div>
+      <div class="lesson-content">
+        <div class="info-panel"><h3>Browser vs. server</h3><p>HTML, CSS, and JavaScript are commonly delivered to the browser. PHP runs on a configured server, where it can process requests and work with databases. A PHP file won't execute just by opening it directly as a local file — use a PHP-enabled server.</p></div>
+        <div class="code-card"><div class="code-head"><span>hello.php</span><button class="copy-btn" data-copy="php-code">Copy code</button></div>
+<pre id="php-code"><code><span class="kw">&lt;?php</span>
+$name = <span class="str">"Developer"</span>;
+$message = <span class="str">"Welcome, "</span> . $name . <span class="str">"!"</span>;
+<span class="kw">echo</span> <span class="str">"&lt;h1&gt;"</span> . htmlspecialchars($message) . <span class="str">"&lt;/h1&gt;"</span>;
+<span class="kw">?&gt;</span></code></pre></div>
+        <div class="info-panel"><h3>Quick setup note</h3><p>To test PHP locally, install PHP or use a local development stack, then run a development server from your project folder with <code>php -S localhost:8000</code>.</p></div>
+      </div>
+    </section>
+
+    <section class="quiz" id="quick-check">
+      <span class="mini-label">Quick knowledge check</span><h2>Which tool handles the styling?</h2><p>Pick an answer to test your memory. No pressure — learning is iterative.</p>
+      <div class="quiz-options">
+        <button type="button" data-answer="HTML">HTML</button><button type="button" data-answer="CSS">CSS</button><button type="button" data-answer="JavaScript">JavaScript</button><button type="button" data-answer="PHP">PHP</button>
+      </div>
+      <div id="quiz-result" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer><span>© <span id="year"></span> CodeLab Starter</span><span>Built for learning · Made to explore</span><a class="text-link" href="#home">Back to top ↑</a></footer>
+
+  <script>
+    // Highlight the current section in the navigation.
+    const navLinks = [...document.querySelectorAll('.nav-links a')];
+    const sections = navLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+        }
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    sections.forEach(section => observer.observe(section));
+
+    // Copy the visible code sample to the clipboard.
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const code = document.getElementById(button.dataset.copy).innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          button.textContent = 'Copied!';
+        } catch {
+          button.textContent = 'Select code to copy';
+        }
+        setTimeout(() => button.textContent = 'Copy code', 1600);
+      });
+    });
+
+    // A tiny interaction demo.
+    document.getElementById('hello-button').addEventListener('click', () => {
+      const message = document.getElementById('demo-message');
+      message.textContent = 'Nice! JavaScript is working.';
+      message.style.color = '#1f7a45';
+    });
+
+    // Theme toggle.
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+
+    // Mini quiz.
+    document.querySelectorAll('[data-answer]').forEach(button => {
+      button.addEventListener('click', () => {
+        const result = document.getElementById('quiz-result');
+        if (button.dataset.answer === 'CSS') {
+          result.textContent = 'Correct! CSS controls the visual style. ✨';
+          result.style.color = '#c7f36b';
+        } else {
+          result.textContent = 'Not quite — CSS is the styling tool. Give it another go!';
+          result.style.color = '#ff8eae';
+        }
+      });
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
